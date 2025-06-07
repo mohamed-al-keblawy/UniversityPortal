@@ -1,12 +1,25 @@
 ﻿
-------------------------- Procedures  -------------------------
+------------------------- Tables  -------------------------
+/*
+CREATE TABLE [dbo].[Roles](
+	[RoleId] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 
+GO
 CREATE TABLE Users (
     UserId INT PRIMARY KEY IDENTITY,
     Username NVARCHAR(100) UNIQUE,
     PasswordHash NVARCHAR(256),
-    Role NVARCHAR(50) -- 'Faculty' or 'Student'
+    RoleId int -- Faculty or Student or Admin
 );
+
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD FOREIGN KEY([RoleId])
+REFERENCES [dbo].[Roles] ([RoleId])
 
 CREATE TABLE Assignments (
     AssignmentId INT PRIMARY KEY IDENTITY,
@@ -38,9 +51,10 @@ CREATE TABLE AssessmentCriteria (
     Score INT,
     Remarks NVARCHAR(MAX)
 );
+*/
 
 ------------------------- Procedures  -------------------------
-
+/*
 CREATE PROCEDURE sp_GetUserByUsername
     @Username NVARCHAR(100)
 AS
@@ -151,7 +165,34 @@ BEGIN
     GROUP BY AC.CriterionName;
 END
 
-
-
+*/
 
 ------------------------- Sample Data -------------------------
+/*
+
+INSERT INTO Roles (RoleName)
+VALUES ('Admin'),('Faculty'), ('Student');
+
+
+-- Admin
+INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+VALUES 
+('Admin', 'admin@gmail.com', 'vHjljVXN4TRuaPjl/liN7fYvpFeqZGpQClM0f6/27iQ=', 1); -- Admin@1234
+
+
+-- Faculty
+INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+VALUES 
+('Dr. Mohamed Al Keblawy', 'alkeblawy.m@gmail.com', 'HZWkxtaB7eWxjImyHOtGv+p7jk2PgkEHYVou4pdJNxA=', 2); -- Pass@1234
+
+INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+VALUES 
+('Dr. Youssef Mobarak ', 'y.Mobarak@gmail.com', 'DSCRKolh0rDrx+1CcXKVf+v71yZV8WyCnh3Jui7Biwk=', 2); -- Youssef@2025
+
+-- Students
+INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+VALUES 
+('Asmaa Kabalan', 'asmaa1990@gmail.com', 'JlebtEGyHB4ZFI6ug3tEIalYSl7ixURJ+0ZwxXAM2r8=', 3),  -- Asmaa@1990
+('Youssef Hassan', 'youssef2025@gmail.com', 'DSCRKolh0rDrx+1CcXKVf+v71yZV8WyCnh3Jui7Biwk=', 3); --Youssef@2025
+
+*/

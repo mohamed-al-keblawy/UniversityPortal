@@ -1,0 +1,30 @@
+﻿@model UniversityPortal.Models.Entities.Assignment
+@{
+    ViewData["Title"] = "Create Assignment";
+}
+
+<h2>Create Assignment</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DueDate"></label>
+        <input asp-for="DueDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="CreatedBy" value="1" /> <!-- TEMP until identity is setup -->
+
+    <button type="submit" class="btn btn-success mt-3">Submit</button>
+</form>

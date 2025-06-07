@@ -1,0 +1,14 @@
+﻿@model UniversityPortal.Models.Entities.Assignment
+@{
+    ViewData["Title"] = "Assignment Details";
+}
+
+<h2>Assignment Details</h2>
+
+<div>
+    <strong>Title:</strong> @Model.Title<br />
+    <strong>Description:</strong> @Model.Description<br />
+    <strong>Due Date:</strong> @Model.DueDate.ToString("yyyy-MM-dd HH:mm")
+</div>
+
+<a class="btn btn-secondary mt-3" asp-action="Index">Back to List</a>
