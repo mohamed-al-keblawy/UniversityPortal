@@ -4,7 +4,13 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9a7d3ac7-4cf0-4368-9808-98b6bda81321</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
+    <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="8.1.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\UniversityPortal.BLL\UniversityPortal.BLL.csproj" />
