@@ -17,11 +17,19 @@ public class AssessmentsController : Controller
         _assignmentService = assignmentService;
     }
 
-    public async Task<IActionResult> Index(int studentId)
+    public async Task<IActionResult> Index(int? assignmentId = null)
     {
-        var assessments = await _assessmentService.GetByStudentIdAsync(studentId);
-        return View(assessments);
+        // For demo: show assessments for all students or one assignment
+        int facultyId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        // You may fetch students from submissions, this is demo only
+        var allAssessments = await _assessmentService.GetByStudentIdAsync(-1); // -1 = get all
+        var myAssessments = allAssessments.Where(a => a.AssessedBy == facultyId).ToList();
+
+        ViewBag.MyAssessments = myAssessments;
+        return View();
     }
+
 
     public IActionResult Create(int assignmentId, int studentId)
     {

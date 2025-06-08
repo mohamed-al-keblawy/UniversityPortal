@@ -20,9 +20,19 @@ public class SubmissionsController : Controller
     public async Task<IActionResult> Index()
     {
         int studentId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
         var submissions = await _submissionService.GetByStudentAsync(studentId);
+        var allAssignments = await _assignmentService.GetAllAssignmentsAsync();
+
+        var submittedIds = submissions.Select(s => s.AssignmentId).ToList();
+        var pendingAssignments = allAssignments
+            .Where(a => !submittedIds.Contains(a.AssignmentId) && a.DueDate > DateTime.Now)
+            .ToList();
+
+        ViewBag.PendingAssignments = pendingAssignments;
         return View(submissions);
     }
+
 
     public async Task<IActionResult> Submit(int assignmentId)
     {

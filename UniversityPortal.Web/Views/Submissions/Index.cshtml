@@ -1,26 +1,37 @@
-﻿@model IEnumerable<UniversityPortal.Models.Entities.Submission>
-@{
-    ViewData["Title"] = "My Submissions";
+﻿@{
+    var pendingAssignments = ViewBag.PendingAssignments as List<UniversityPortal.Models.Entities.Assignment>;
 }
 
-<h2>My Submissions</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Assignment</th>
-            <th>Submission</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var sub in Model)
-        {
+@if (pendingAssignments != null && pendingAssignments.Any())
+{
+    <h3 class="mt-4">Available Assignments</h3>
+    <table class="table">
+        <thead>
             <tr>
-                <td>@sub.AssignmentId</td>
-                <td><a href="@sub.SubmissionUrl" target="_blank">View</a></td>
-                <td>@sub.SubmissionDate.ToString("g")</td>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Submit</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var a in pendingAssignments)
+            {
+                <tr>
+                    <td>@a.Title</td>
+                    <td>@a.DueDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <a asp-controller="Submissions" asp-action="Submit" asp-route-assignmentId="@a.AssignmentId" class="btn btn-success btn-sm">
+                            Submit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info mt-3">
+        No new assignments available to submit.
+    </div>
+}

@@ -75,8 +75,8 @@ namespace UniversityPortal.Web.Controllers
             return user.RoleId switch
             {
                 1 => RedirectToAction("Index", "Admin"),
-                2 => RedirectToAction("Index", "Assignments"), // Faculty
-                3 => RedirectToAction("Dashboard", "Student"), // Student
+                2 => RedirectToAction("Index", "Faculty"), // Faculty
+                3 => RedirectToAction("Performance", "Index"), // Student
                 _ => RedirectToAction("Login")
             };
         }

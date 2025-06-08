@@ -1,23 +1,44 @@
-﻿@model IEnumerable<UniversityPortal.Models.Entities.Assessment>
-@{
+﻿@{
     ViewData["Title"] = "Assessments";
+    var assessments = ViewBag.MyAssessments as List<UniversityPortal.Models.Entities.Assessment>;
 }
 
-<h2>Student Assessments</h2>
+<h2>My Assessments</h2>
 
-@foreach (var a in Model)
+@if (assessments != null && assessments.Any())
 {
-    <div class="card my-2 p-3">
-        <strong>Assignment ID:</strong> @a.AssignmentId<br />
-        <strong>Assessed By:</strong> @a.AssessedBy<br />
-
-        <ul>
-            @foreach (var c in a.Criteria)
-            {
-                <li>
-                    <strong>@c.CriterionName</strong>: @c.Score/10 – <em>@c.Remarks</em>
-                </li>
-            }
-        </ul>
-    </div>
+    @foreach (var a in assessments)
+    {
+        <div class="card my-2 p-3">
+            <strong>Assignment ID:</strong> @a.AssignmentId<br />
+            <strong>Student ID:</strong> @a.StudentId<br />
+            <ul>
+                @foreach (var c in a.Criteria)
+                {
+                    <li><strong>@c.CriterionName:</strong> @c.Score/10 – <em>@c.Remarks</em></li>
+                }
+            </ul>
+        </div>
+    }
 }
+else
+{
+    <div class="alert alert-info">No assessments done yet.</div>
+}
+
+<hr />
+
+<h3>Create Assessment</h3>
+<p>You can assess any assignment submission manually:</p>
+
+<form asp-action="Create" method="get" class="form-inline">
+    <div class="form-group me-2">
+        <label class="me-1">Assignment ID:</label>
+        <input name="assignmentId" type="number" class="form-control" required />
+    </div>
+    <div class="form-group me-2">
+        <label class="me-1">Student ID:</label>
+        <input name="studentId" type="number" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Create Assessment</button>
+</form>

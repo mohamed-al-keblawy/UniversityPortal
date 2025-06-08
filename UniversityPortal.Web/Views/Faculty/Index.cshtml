@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Faculty Dashboard";
+    var totalAssignments = (int)ViewBag.TotalAssignments;
+    var totalAssessments = (int)ViewBag.TotalAssessments;
+}
+
+<h2>Faculty Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Assignments Created</h5>
+                <p class="card-text display-4">@totalAssignments</p>
+                <a href="/Assignments/Index" class="btn btn-light">View Assignments</a>
+                <a href="/Assignments/Create" class="btn btn-light">Create New</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Assessments Done</h5>
+                <p class="card-text display-4">@totalAssessments</p>
+                <a href="/Assessments/Index" class="btn btn-light">View Assessments</a>
+            </div>
+        </div>
+    </div>
+</div>

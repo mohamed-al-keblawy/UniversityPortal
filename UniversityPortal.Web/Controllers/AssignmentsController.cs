@@ -6,7 +6,7 @@ using UniversityPortal.Models.Entities;
 
 namespace UniversityPortal.Web.Controllers
 {
-    [Authorize(Roles = "Student")]
+    [Authorize(Roles = "Faculty")]
     public class AssignmentsController : Controller
     {
         private readonly IAssignmentService _assignmentService;
