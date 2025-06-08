@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityPortal.BLL.Interfaces;
 using UniversityPortal.Models;
 using UniversityPortal.Models.Entities;
 
 namespace UniversityPortal.Web.Controllers
 {
+    [Authorize(Roles = "Student")]
     public class AssignmentsController : Controller
     {
         private readonly IAssignmentService _assignmentService;

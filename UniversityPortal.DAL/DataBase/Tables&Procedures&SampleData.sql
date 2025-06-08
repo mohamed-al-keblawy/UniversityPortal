@@ -1,25 +1,28 @@
 ﻿
 ------------------------- Tables  -------------------------
-/*
-CREATE TABLE [dbo].[Roles](
-	[RoleId] [int] IDENTITY(1,1) NOT NULL,
-	[RoleName] [nvarchar](50) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[RoleId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+
+
+CREATE TABLE Roles (
+    RoleId INT PRIMARY KEY,
+    RoleName NVARCHAR(50)
+);
 
 GO
+
 CREATE TABLE Users (
     UserId INT PRIMARY KEY IDENTITY,
     Username NVARCHAR(100) UNIQUE,
+    Email NVARCHAR(150),
     PasswordHash NVARCHAR(256),
     RoleId int -- Faculty or Student or Admin
 );
 
+GO
+
 ALTER TABLE [dbo].[Users]  WITH CHECK ADD FOREIGN KEY([RoleId])
 REFERENCES [dbo].[Roles] ([RoleId])
+
+GO
 
 CREATE TABLE Assignments (
     AssignmentId INT PRIMARY KEY IDENTITY,
@@ -29,6 +32,8 @@ CREATE TABLE Assignments (
     CreatedBy INT FOREIGN KEY REFERENCES Users(UserId)
 );
 
+GO
+
 CREATE TABLE Submissions (
     SubmissionId INT PRIMARY KEY IDENTITY,
     AssignmentId INT FOREIGN KEY REFERENCES Assignments(AssignmentId),
@@ -37,12 +42,16 @@ CREATE TABLE Submissions (
     SubmissionDate DATETIME
 );
 
+GO
+
 CREATE TABLE Assessments (
     AssessmentId INT PRIMARY KEY IDENTITY,
     AssignmentId INT FOREIGN KEY REFERENCES Assignments(AssignmentId),
     StudentId INT FOREIGN KEY REFERENCES Users(UserId),
     AssessedBy INT FOREIGN KEY REFERENCES Users(UserId)
 );
+
+GO
 
 CREATE TABLE AssessmentCriteria (
     CriterionId INT PRIMARY KEY IDENTITY,
@@ -51,10 +60,24 @@ CREATE TABLE AssessmentCriteria (
     Score INT,
     Remarks NVARCHAR(MAX)
 );
-*/
+ 
+
+
 
 ------------------------- Procedures  -------------------------
-/*
+GO
+
+CREATE OR ALTER PROCEDURE sp_GetUserByEmail
+    @Email NVARCHAR(150)
+AS
+BEGIN
+    SELECT UserId, Username, Email, PasswordHash, RoleId
+    FROM Users
+    WHERE Email = @Email
+END
+
+GO
+
 CREATE PROCEDURE sp_GetUserByUsername
     @Username NVARCHAR(100)
 AS
@@ -62,11 +85,15 @@ BEGIN
     SELECT * FROM Users WHERE Username = @Username;
 END
 
+GO 
+
 CREATE PROCEDURE sp_GetAllAssignments
 AS
 BEGIN
     SELECT * FROM Assignments;
 END
+
+GO 
 
 CREATE PROCEDURE sp_GetAssignmentById
     @AssignmentId INT
@@ -75,6 +102,7 @@ BEGIN
     SELECT * FROM Assignments WHERE AssignmentId = @AssignmentId;
 END
 
+GO
 
 CREATE PROCEDURE sp_CreateAssignment
     @Title NVARCHAR(200),
@@ -89,6 +117,7 @@ BEGIN
     SELECT SCOPE_IDENTITY();
 END
 
+GO
 
 CREATE PROCEDURE sp_SubmitAssignment
     @AssignmentId INT,
@@ -101,6 +130,7 @@ BEGIN
     VALUES (@AssignmentId, @SubmittedBy, @SubmissionUrl, @SubmissionDate);
 END
 
+GO
 
 CREATE PROCEDURE sp_GetSubmissionsByStudent
     @StudentId INT
@@ -109,6 +139,7 @@ BEGIN
     SELECT * FROM Submissions WHERE SubmittedBy = @StudentId;
 END
 
+GO
 
 CREATE PROCEDURE sp_CreateAssessment
     @AssignmentId INT,
@@ -123,6 +154,7 @@ BEGIN
     SET @AssessmentId = SCOPE_IDENTITY();
 END
 
+GO
 
 CREATE PROCEDURE sp_AddAssessmentCriterion
     @AssessmentId INT,
@@ -135,6 +167,7 @@ BEGIN
     VALUES (@AssessmentId, @CriterionName, @Score, @Remarks);
 END
 
+GO
 
 CREATE PROCEDURE sp_GetAssessmentByStudent
     @StudentId INT
@@ -143,6 +176,7 @@ BEGIN
     SELECT * FROM Assessments WHERE StudentId = @StudentId;
 END
 
+GO
 
 CREATE PROCEDURE sp_GetCriteriaByAssessment
     @AssessmentId INT
@@ -151,6 +185,7 @@ BEGIN
     SELECT * FROM AssessmentCriteria WHERE AssessmentId = @AssessmentId;
 END
 
+GO
 
 CREATE PROCEDURE sp_GetStudentPerformanceSummary
     @StudentId INT
@@ -165,32 +200,46 @@ BEGIN
     GROUP BY AC.CriterionName;
 END
 
-*/
 
+GO
+
+CREATE OR ALTER PROCEDURE sp_RegisterUser
+    @Username NVARCHAR(100),
+    @Email NVARCHAR(150),
+    @PasswordHash NVARCHAR(256),
+    @RoleId INT
+AS
+BEGIN
+    INSERT INTO Users (Username, Email, PasswordHash, RoleId)
+    VALUES (@Username, @Email, @PasswordHash, @RoleId);
+END
+
+GO
 ------------------------- Sample Data -------------------------
 /*
 
-INSERT INTO Roles (RoleName)
-VALUES ('Admin'),('Faculty'), ('Student');
+ 
 
+INSERT INTO Roles (RoleId, RoleName)
+VALUES (1, 'Admin'), (2, 'Faculty'), (3, 'Student');
 
 -- Admin
-INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+INSERT INTO Users (UserName, Email, PasswordHash, RoleId)
 VALUES 
 ('Admin', 'admin@gmail.com', 'vHjljVXN4TRuaPjl/liN7fYvpFeqZGpQClM0f6/27iQ=', 1); -- Admin@1234
 
 
 -- Faculty
-INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+INSERT INTO Users (UserName, Email, PasswordHash, RoleId)
 VALUES 
 ('Dr. Mohamed Al Keblawy', 'alkeblawy.m@gmail.com', 'HZWkxtaB7eWxjImyHOtGv+p7jk2PgkEHYVou4pdJNxA=', 2); -- Pass@1234
 
-INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+INSERT INTO Users (UserName, Email, PasswordHash, RoleId)
 VALUES 
 ('Dr. Youssef Mobarak ', 'y.Mobarak@gmail.com', 'DSCRKolh0rDrx+1CcXKVf+v71yZV8WyCnh3Jui7Biwk=', 2); -- Youssef@2025
 
 -- Students
-INSERT INTO Users (FullName, Email, PasswordHash, RoleId)
+INSERT INTO Users (UserName, Email, PasswordHash, RoleId)
 VALUES 
 ('Asmaa Kabalan', 'asmaa1990@gmail.com', 'JlebtEGyHB4ZFI6ug3tEIalYSl7ixURJ+0ZwxXAM2r8=', 3),  -- Asmaa@1990
 ('Youssef Hassan', 'youssef2025@gmail.com', 'DSCRKolh0rDrx+1CcXKVf+v71yZV8WyCnh3Jui7Biwk=', 3); --Youssef@2025

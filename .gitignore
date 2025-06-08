@@ -11,3 +11,4 @@ UniversityPortal.Web/bin
 UniversityPortal.DAL/DataBase/UniversityPortalDB_log.ldf
 UniversityPortal.DAL/DataBase/UniversityPortalDB.mdf
 UniversityPortal.Models/bin
+.vs

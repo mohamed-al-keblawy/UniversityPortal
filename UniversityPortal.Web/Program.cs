@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using UniversityPortal.BLL.Interfaces;
 using UniversityPortal.BLL.Services;
 using UniversityPortal.DAL.Interfaces;
@@ -10,6 +11,16 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IAssignmentService, AssignmentService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+    });
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
@@ -21,6 +32,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
