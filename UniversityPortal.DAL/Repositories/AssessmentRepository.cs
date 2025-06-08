@@ -60,4 +60,17 @@ public class AssessmentRepository(IConfiguration configuration) : IAssessmentRep
 
         return assessments;
     }
+
+
+    public async Task<IEnumerable<PerformanceMetric>> GetStudentPerformanceAsync(int studentId)
+    {
+        using var connection = new SqlConnection(_connectionString);
+
+        return await connection.QueryAsync<PerformanceMetric>(
+            "sp_GetStudentPerformanceSummary",
+            new { StudentId = studentId },
+            commandType: CommandType.StoredProcedure
+        );
+    }
+
 }

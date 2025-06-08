@@ -11,5 +11,8 @@ namespace UniversityPortal.BLL.Interfaces
     {
         Task<int> CreateAssessmentAsync(Assessment assessment);
         Task<IEnumerable<Assessment>> GetByStudentIdAsync(int studentId);
+
+        Task<IEnumerable<PerformanceMetric>> GetStudentPerformanceAsync(int studentId);
+
     }
 }

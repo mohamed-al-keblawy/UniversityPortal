@@ -21,4 +21,10 @@ public class AssessmentService : IAssessmentService
     {
         return _repository.GetByStudentIdAsync(studentId);
     }
+
+    public Task<IEnumerable<PerformanceMetric>> GetStudentPerformanceAsync(int studentId)
+    {
+        return _repository.GetStudentPerformanceAsync(studentId);
+    }
+
 }
