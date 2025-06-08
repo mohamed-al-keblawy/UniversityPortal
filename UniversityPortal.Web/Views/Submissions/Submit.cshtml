@@ -1,0 +1,19 @@
+﻿@model UniversityPortal.Models.Entities.Submission
+@{
+    ViewData["Title"] = "Submit Assignment";
+    var assignment = ViewBag.Assignment as UniversityPortal.Models.Entities.Assignment;
+}
+
+<h2>Submit Assignment: @assignment?.Title</h2>
+
+<form asp-action="Submit" method="post">
+    <input type="hidden" asp-for="AssignmentId" />
+
+    <div class="form-group">
+        <label asp-for="SubmissionUrl">Submission Link or File URL</label>
+        <input asp-for="SubmissionUrl" class="form-control" />
+        <span asp-validation-for="SubmissionUrl" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Submit</button>
+</form>

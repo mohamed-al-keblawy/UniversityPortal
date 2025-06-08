@@ -1,0 +1,23 @@
+﻿@model IEnumerable<UniversityPortal.Models.Entities.Assessment>
+@{
+    ViewData["Title"] = "Assessments";
+}
+
+<h2>Student Assessments</h2>
+
+@foreach (var a in Model)
+{
+    <div class="card my-2 p-3">
+        <strong>Assignment ID:</strong> @a.AssignmentId<br />
+        <strong>Assessed By:</strong> @a.AssessedBy<br />
+
+        <ul>
+            @foreach (var c in a.Criteria)
+            {
+                <li>
+                    <strong>@c.CriterionName</strong>: @c.Score/10 – <em>@c.Remarks</em>
+                </li>
+            }
+        </ul>
+    </div>
+}

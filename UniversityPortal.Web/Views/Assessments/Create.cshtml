@@ -1,0 +1,23 @@
+﻿@model UniversityPortal.Models.Entities.Assessment
+@{
+    ViewData["Title"] = "Grade Assignment";
+}
+
+<h2>Grade Assignment</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="AssignmentId" />
+    <input type="hidden" asp-for="StudentId" />
+
+    @for (int i = 0; i < Model.Criteria.Count; i++)
+    {
+        <div class="form-group">
+            <label>@Model.Criteria[i].CriterionName</label>
+            <input type="hidden" asp-for="Criteria[@i].CriterionName" />
+            <input asp-for="Criteria[@i].Score" class="form-control" placeholder="Score (1–10)" />
+            <textarea asp-for="Criteria[@i].Remarks" class="form-control mt-1" placeholder="Remarks"></textarea>
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-3">Save Assessment</button>
+</form>

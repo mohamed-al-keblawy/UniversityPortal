@@ -1,0 +1,26 @@
+﻿@model IEnumerable<UniversityPortal.Models.Entities.Submission>
+@{
+    ViewData["Title"] = "My Submissions";
+}
+
+<h2>My Submissions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Assignment</th>
+            <th>Submission</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sub in Model)
+        {
+            <tr>
+                <td>@sub.AssignmentId</td>
+                <td><a href="@sub.SubmissionUrl" target="_blank">View</a></td>
+                <td>@sub.SubmissionDate.ToString("g")</td>
+            </tr>
+        }
+    </tbody>
+</table>
