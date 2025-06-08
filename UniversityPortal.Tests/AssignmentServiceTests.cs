@@ -13,12 +13,12 @@ namespace UniversityPortal.Tests
     public class AssignmentServiceTests
     {
         [Fact]
-        public async Task CreateAssignment_ShouldReturnValidId()
+        public async Task CreateAssignmentAsync_ShouldCallRepositoryAndReturnId()
         {
             // Arrange
             var mockRepo = new Mock<IAssignmentRepository>();
             var service = new AssignmentService(mockRepo.Object);
-            var assignment = new Assignment { Title = "Test", Description = "Test", DueDate = DateTime.Now, CreatedBy = 1 };
+            var assignment = new Assignment { Title = "Test", CreatedBy = 2 };
 
             mockRepo.Setup(r => r.CreateAsync(assignment)).ReturnsAsync(1);
 
@@ -27,7 +27,24 @@ namespace UniversityPortal.Tests
 
             // Assert
             Assert.Equal(1, result);
+            mockRepo.Verify(r => r.CreateAsync(assignment), Times.Once);
+        }
+
+
+        [Fact]
+        public async Task GetByIdAsync_ReturnsAssignment()
+        {
+            var assignment = new Assignment { AssignmentId = 5, Title = "Sample" };
+            var mockRepo = new Mock<IAssignmentRepository>();
+            mockRepo.Setup(r => r.GetByIdAsync(5)).ReturnsAsync(assignment);
+            var service = new AssignmentService(mockRepo.Object);
+
+            var result = await service.GetByIdAsync(5);
+
+            Assert.NotNull(result);
+            Assert.Equal("Sample", result.Title);
         }
     }
+
 
 }
